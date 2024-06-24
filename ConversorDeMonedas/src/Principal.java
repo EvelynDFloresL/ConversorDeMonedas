@@ -7,69 +7,92 @@ import java.util.Scanner;
 
 public class Principal {
     public static void main(String[] args) throws IOException, InterruptedException {
-        Scanner lectura = new Scanner(System.in);
-        System.out.println("***********************************");
-        System.out.println("Eliga una una conversion");
-        System.out.println("""
-                1. ARS (peso argentino) --> COP (peso colombiano)
-                2. ARS (peso argentino) --> USD (dolar estadounidense)
-                3. COP (peso colombiano) --> ARS (peso argentino)
-                4. COP (peso colombiano) --> USD (dolar estadounidense)
-                5. USD (dolar estadounidense) --> ARS (peso argentino)
-                6. USD (dolar estadounidense) --> COP (peso colombiano)
-                """);
-        String eleccion=lectura.nextLine();
-        switch (eleccion){
-            case "1":
-                String codigoMoneda = "ARS"; //codigo de moneda argentino
-                System.out.println("ARS (peso argentino) --> COP (peso colombiano)");
-                System.out.println("Ingrese el valor que desee convertir: ");
-                int cantidadMonedas = lectura.nextInt();
-                System.out.println("El número ingresado es: " + cantidadMonedas);
-                String direccion = "https://v6.exchangerate-api.com/v6/40beafb4ebcfa87030744b4e/latest/"+codigoMoneda;
+            Scanner lectura = new Scanner(System.in);
+            String eleccion;
+            do {
+            System.out.println("***********************************");
+            System.out.println("Eliga una una conversion");
+            System.out.println("""
+                    1. ARS (peso argentino) --> COP (peso colombiano)
+                    2. ARS (peso argentino) --> USD (dolar estadounidense)
+                    3. COP (peso colombiano) --> ARS (peso argentino)
+                    4. COP (peso colombiano) --> USD (dolar estadounidense)
+                    5. USD (dolar estadounidense) --> ARS (peso argentino)
+                    6. USD (dolar estadounidense) --> COP (peso colombiano)
+                    7. SALIR
+                    """);
+            eleccion = lectura.nextLine();
+            switch (eleccion) {
+                case "1": {
+                    String codigoMoneda = "ARS"; //codigo de moneda argentino
+                    String codigoMonedaDestino = "COP"; // codigo de moneda destino colombiano
+                    Monedas monedas = new Monedas();
+                    System.out.println("ARS (peso argentino) --> COP (peso colombiano)");
+                    try {
+                        double tasaCambio = monedas.obtenerTasaCambio(codigoMoneda, codigoMonedaDestino);
+                        System.out.println("La tasa de cambio de " + codigoMoneda + " a " + codigoMonedaDestino + " es: " + tasaCambio);
 
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(direccion))
-                        .build();
+                        System.out.println("Ingrese el valor que desee convertir: ");
+                        int cantidadMonedas = lectura.nextInt();
 
-                HttpResponse<String> response = client
-                        .send(request, HttpResponse.BodyHandlers.ofString());
-                System.out.println(response.body());
+                        System.out.println("La conversion de " + cantidadMonedas + "(ARS) a (COP) es: " + cantidadMonedas * tasaCambio);
 
-                ///////////////////////////////////////////
-               /* String json = response.body();
-                System.out.println(json);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                MonedaOmdb miTituloOmdb = gson.fromJson(json, MonedaOmdb.class);
-                System.out.println(miTituloOmdb);
+                    break;
+                }
+                case "2": {
+                    String codigoMoneda = "ARS"; //codigo de moneda argentino
+                    String codigoMonedaDestino = "USD"; // codigo de moneda destino dolar estadounidense
+                    Monedas monedas = new Monedas();
+                    System.out.println("ARS (peso argentino) --> USD (dolar estadounidense)");
+                    try {
+                        double tasaCambio = monedas.obtenerTasaCambio(codigoMoneda, codigoMonedaDestino);
+                        System.out.println("La tasa de cambio de " + codigoMoneda + " a " + codigoMonedaDestino + " es: " + tasaCambio);
 
-                Monedas miTitulo = new Monedas(miTituloOmdb);
-                System.out.println("Titulo ya convertido: " + miTitulo);
+                        System.out.println("Ingrese el valor que desee convertir: ");
+                        int cantidadMonedas = lectura.nextInt();
 
-                monedas.add(miTitulo);*/
+                        System.out.println("La conversion de " + cantidadMonedas + "(ARS) a (USD) es: " + cantidadMonedas * tasaCambio);
 
-            break;
-            case "2":
-                System.out.println("ARS (peso argentino) --> USD (dolar estadounidense)");
-                break;
-            case "3":
-                System.out.println("COP (peso colombiano) --> ARS (peso argentino)");
-            break;
-            case "4":
-                System.out.println("COP (peso colombiano) --> USD (dolar estadounidense)");
-                break;
-            case "5":
-                System.out.println("USD (dolar estadounidense) --> ARS (peso argentino)");
-            break;
-            case "6":
-                System.out.println("USD (dolar estadounidense) --> COP (peso colombiano)");
-            break;
-            default:
-                System.out.println("Opción no válida.");
-            break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-        }
+
+                    break;
+                }
+                case "3": {
+                    System.out.println("COP (peso colombiano) --> ARS (peso argentino)");
+                    break;
+                }
+                case "4": {
+                    System.out.println("COP (peso colombiano) --> USD (dolar estadounidense)");
+                    break;
+                }
+                case "5": {
+                    System.out.println("USD (dolar estadounidense) --> ARS (peso argentino)");
+                    break;
+                }
+
+                case "6": {
+                    System.out.println("USD (dolar estadounidense) --> COP (peso colombiano)");
+                    break;
+                }
+                case "7": {
+                    System.out.println("Saliendo del programa...");
+                    break;
+                }
+                default: {
+                    System.out.println("Opción no válida.");
+                    break;
+                }
+
+            }
+        }while (!eleccion.equals("7"));
+        lectura.close();
 
 
     }
