@@ -26,7 +26,7 @@ public class Monedas{
         if (conversionRates.has(codigoMonedaDestino)) {
             return conversionRates.get(codigoMonedaDestino).getAsDouble();
         } else {
-            throw new Exception("No se encontró la tasa de cambio para la moneda destino especificada.");
+            throw new Exception("No se encontró la tasa de cambio para la moneda especificada.");
         }
     }
 }
